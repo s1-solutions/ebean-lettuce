@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.sinistral</groupId>
+    <artifactId>ebean-lettuce</artifactId>
+    <name>ebean-lettuce</name>
+    <description>Ebean Redis Lettuce L2 Cache</description>
+    <version>1.0.0</version>
+
+    <properties>
+        <java.version>21</java.version>
+        <ebean.version>15.11.0</ebean.version>
+        <lettuce-core.version>6.5.5.RELEASE</lettuce-core.version>
+        <commons-pool2.version>2.12.1</commons-pool2.version>
+        <junit.version>5.13.0-M3</junit.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.18</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>${lettuce-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-api</artifactId>
+            <version>${ebean.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-core</artifactId>
+            <version>${ebean.version}</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-querybean</artifactId>
+            <version>${ebean.version}</version>
+
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ebean</groupId>
+            <artifactId>ebean-test</artifactId>
+            <version>${ebean.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>sign-artifacts</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.ebean</groupId>
+                <artifactId>ebean-maven-plugin</artifactId>
+                <version>15.12.0</version>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <release>${java.version}</release>
+                    <compilerArgument>-parameters</compilerArgument>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>s1-release</id>
+            <url>https://maven.s1.solutions/repository/s1-release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>s1-snapshot</id>
+            <url>https://maven.s1.solutions/repository/s1-snapshot/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>
+

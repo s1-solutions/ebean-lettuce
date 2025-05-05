@@ -1,0 +1,26 @@
+# Compiled class file
+*.class
+
+# Generated files
+/target
+
+# IDE-specific files
+.idea/
+*.iml
+*.ipr
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Maven Wrapper
+.mvn/wrapper/
+
+# Logs and temp files
+*.log
+tmp/
+temp/
+
+# OS-specific files
+.DS_Store
