@@ -100,18 +100,10 @@ final class LettuceCacheFactory implements ServerCacheFactory {
             this.redisClient = getRedisClient(config);
             this.redisConnection = redisClient.connect(new ByteArrayCodec());
             this.redisPubSubConnection = redisClient.connectPubSub(new ByteArrayCodec());
-//            setupSubscriber();
             new CacheDaemonTopic().subscribe(redisPubSubConnection);
         }
     }
-//
-//    private void setupSubscriber() {
-//        StatefulRedisPubSubConnection<String, String> pubSubConnection = redisClient.connectPubSub();
-//        pubSubConnection.addListener(new CacheChannelListener());
-//        RedisPubSubCommands<String, String> sync = pubSubConnection.sync();
-//        sync.subscribe(CHANNEL_L2, CHANNEL_NEAR);
-//        logger.log(INFO, "Established connection to Redis");
-//    }
+
 
     private RedisClient getRedisClient(DatabaseBuilder.Settings config) {
         RedisClient redisClient = config.getServiceObject(RedisClient.class);
@@ -127,23 +119,6 @@ final class LettuceCacheFactory implements ServerCacheFactory {
         return lettuceConfig.createClient();
     }
 
-//    /**
-//     * Return the JedisPool to use (only 1 at this stage).
-//     */
-//    private JedisPool getJedisPool(DatabaseBuilder.Settings config) {
-//
-//        JedisPool jedisPool = config.getServiceObject(JedisPool.class);
-//        if (jedisPool != null) {
-//            return jedisPool;
-//        }
-//        RedisConfig redisConfig = config.getServiceObject(RedisConfig.class);
-//        if (redisConfig == null) {
-//            redisConfig = new RedisConfig();
-//        }
-//        redisConfig.loadProperties(config.getProperties());
-//        log.log(INFO, "using l2cache redis host {0}:{1}", redisConfig.getServer(), redisConfig.getPort());
-//        return redisConfig.createPool();
-//    }
 
     @Override
     public void visit(MetricVisitor visitor) {
@@ -218,10 +193,6 @@ final class LettuceCacheFactory implements ServerCacheFactory {
 
         try {
 
-//            if (logger.isLoggable(DEBUG)) {
-//                logger.log(DEBUG, "sendQueryCacheInvalidation {0}", name);
-//            }
-
             RedisPubSubAsyncCommands<byte[], byte[]> commands = redisPubSubConnection.async();
 
             commands.publish(CHANNEL_L2_BYTES, encodeMessage(serverId + ":queryCache:" + name));
@@ -237,9 +208,6 @@ final class LettuceCacheFactory implements ServerCacheFactory {
 
         try {
 
-//            if (logger.isLoggable(DEBUG)) {
-//                logger.log(DEBUG, "sendTableMod {0}", formattedMsg);
-//            }
 
             RedisPubSubAsyncCommands<byte[], byte[]> commands = redisPubSubConnection.async();
 
@@ -302,9 +270,7 @@ final class LettuceCacheFactory implements ServerCacheFactory {
     private void queryCacheInvalidate(String key) {
         long nanos = System.nanoTime();
         try {
-//            if (logger.isLoggable(DEBUG)) {
-//                logger.log(DEBUG, "queryCacheInvalidate {0}", key);
-//            }
+
             RQueryCache queryCache = queryCaches.get(key);
             if (queryCache != null) {
                 queryCache.invalidate();
@@ -320,9 +286,7 @@ final class LettuceCacheFactory implements ServerCacheFactory {
     private void processTableNotify(String rawMessage) {
         long nanos = System.nanoTime();
         try {
-//            if (logger.isLoggable(DEBUG)) {
-//                logger.log(DEBUG, "processTableNotify {0}", rawMessage);
-//            }
+
             Set<String> tables = new HashSet<>(asList(rawMessage.split(",")));
             listener.notify(new ServerCacheNotification(tables));
         } finally {
